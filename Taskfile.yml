@@ -1,0 +1,41 @@
+# https://taskfile.dev
+
+version: '3'
+
+vars:
+  BUILD_DIR: build
+
+tasks:
+
+  default:
+    cmds:
+      - clear
+      - task: build
+      - ./{{.BUILD_DIR}}/bin/ImgPack-test
+    silent: true
+
+  mk:
+    cmds:
+      - mkdir {{.BUILD_DIR}}
+    silent: true
+
+  config:
+    - cmake --preset=default
+  generate:
+    - COMPILE_EXECUTABLE="ON" cmake -S . -B {{.BUILD_DIR}} -G Ninja
+  ninja:
+    - ninja -C {{.BUILD_DIR}}
+  lib: 
+    - cmake -S . -B {{.BUILD_DIR}} -G Ninja
+  build:
+    cmds:
+      - task: generate
+      - task: ninja
+    silent: true
+  build-lib:
+    cmds:
+      - task: lib
+      - task: ninja
+    silent: true
+  
+    
